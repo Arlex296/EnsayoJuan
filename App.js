@@ -1,69 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const API_URL = 'https://jsonplaceholder.typicode.com/posts'; 
+const RadioButtonExample = () => {
+  const [selectedValue, setSelectedValue] = useState(null);
 
-const App = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const jsonData = await response.json();
-        setData(jsonData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.boldText}>Id:</Text>
-      <Text>{item.id}</Text>
-      <Text style={styles.boldText}>Title:</Text>
-      <Text>{item.title}</Text>
-      <Text style={styles.boldText}>Body:</Text>
-      <Text>{item.body}</Text>
-    </View>
-  );
+  const handleRadioButtonPress = (value) => {
+    setSelectedValue(value);
+  };
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-        />
-      )}
+      <TouchableOpacity style={styles.option} onPress={() => handleRadioButtonPress('Automovil')}>
+        <MaterialCommunityIcons name={selectedValue === 'Automovil' ? 'radiobox-marked' : 'radiobox-blank'} size={24} color="black" />
+        <Text style={styles.optionText}> Automovil</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.option} onPress={() => handleRadioButtonPress('Taxi')}>
+        <MaterialCommunityIcons name={selectedValue === 'Taxi' ? 'radiobox-marked' : 'radiobox-blank'} size={24} color="black" />
+        <Text style={styles.optionText}>Taxi</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.option} onPress={() => handleRadioButtonPress('Camion')}>
+        <MaterialCommunityIcons name={selectedValue === 'Camion' ? 'radiobox-marked' : 'radiobox-blank'} size={24} color="black" />
+        <Text style={styles.optionText}> Camion</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.selectedText}> Tipo: {selectedValue}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    padding: 30,
     flex: 1,
-    justifyContent: 'center',
+    marginLeft: 20,
+    marginTop: 60,
+  },
+
+  option: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    marginVertical: 10,
   },
-  itemContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    padding: 10,
+  optionText: {
+    marginLeft: 10,
+    fontSize: 20,
   },
-  boldText: {
-    fontWeight: 'bold',
-  },
+  selectedText: {
+    marginTop: 20,
+    fontSize: 20
+  }
+
 });
 
-export default App;
+export default RadioButtonExample;
